@@ -80,27 +80,54 @@ public class Moneda {
         List<Moneda> monedas = new ArrayList<>();
         try {
             BaseDatos bd = ConexionBD.obtenerBaseDatos();
-            if(bd != null){
-            ResultSet rs = bd.consultar("SELECT * FROM Moneda ORDER BY Moneda");
-            if (rs != null) {
-                rs.beforeFirst();
-                while (rs.next()) {
-                    Moneda n = new Moneda(Util.leerEntero(rs, "Id"),
-                            Util.leerTexto(rs, "Moneda"),
-                            Util.leerTexto(rs, "Sigla"),
-                            Util.leerTexto(rs, "Simbolo"),
-                            Util.leerTexto(rs, "Emisor")
-                    );
-                    monedas.add(n);
+            if (bd != null) {
+                ResultSet rs = bd.consultar("SELECT * FROM Moneda ORDER BY Moneda");
+                if (rs != null) {
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        Moneda n = new Moneda(Util.leerEntero(rs, "Id"),
+                                Util.leerTexto(rs, "Moneda"),
+                                Util.leerTexto(rs, "Sigla"),
+                                Util.leerTexto(rs, "Simbolo"),
+                                Util.leerTexto(rs, "Emisor")
+                        );
+                        monedas.add(n);
+                    }
                 }
-            }
-            }
-            else{
-            throw new Exception("No se ha conectado a la Base de Datos");
+            } else {
+                throw new Exception("No se ha conectado a la Base de Datos");
             }
         } catch (Exception ex) {
             throw new Exception("Error al listar monedas: \n [** " + ex + " **]");
         }
         return monedas;
     }
+
+    //Metodo que devuelve un objeto moneda con base en la clase primaria
+    public static Moneda obtener(int id) throws Exception {
+        try {
+            BaseDatos bd = ConexionBD.obtenerBaseDatos();
+            if (bd != null) {
+                ResultSet rs = bd.consultar("SELECT * FROM Moneda WHERE Id=" + id);
+                if (rs != null) {
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        return new Moneda(Util.leerEntero(rs, "Id"),
+                                Util.leerTexto(rs, "Moneda"),
+                                Util.leerTexto(rs, "Sigla"),
+                                Util.leerTexto(rs, "Simbolo"),
+                                Util.leerTexto(rs, "Emisor")
+                        );
+                    }
+                }
+            } else {
+                throw new Exception("No se ha conectado a la Base de Datos");
+            }
+        } catch (Exception ex) {
+            throw new Exception("Error al obtener una moneda: \n [** " + ex + " **]");
+        }
+        return null;
+
+    }
+
 }
