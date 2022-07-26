@@ -111,14 +111,13 @@ public class Moneda {
                 ResultSet rs = bd.consultar("SELECT * FROM Moneda WHERE Id=" + id);
                 if (rs != null) {
                     rs.beforeFirst();
-                    while (rs.next()) {
+                   rs.next();
                         return new Moneda(Util.leerEntero(rs, "Id"),
                                 Util.leerTexto(rs, "Moneda"),
                                 Util.leerTexto(rs, "Sigla"),
                                 Util.leerTexto(rs, "Simbolo"),
                                 Util.leerTexto(rs, "Emisor")
                         );
-                    }
                 }
             } else {
                 throw new Exception("No se ha conectado a la Base de Datos");
